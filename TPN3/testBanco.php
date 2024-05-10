@@ -25,6 +25,9 @@ $objBanco->realizarDeposito(3, 300);
 $objBanco->realizarDeposito(4, 300);
 $objBanco->realizarDeposito(5, 300);
 
+$objBanco->realizarRetiro(1, 150);
+$objBanco->realizarDeposito(5, 150);
+
 echo $objBanco;
 
 

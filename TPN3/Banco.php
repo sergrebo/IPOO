@@ -41,13 +41,21 @@ class Banco{
 
     public function __toString()
     {
-        return "Cuentas corrientes:". $this->leerColeccion($this->getColCC()). "\nCajas de ahorro:". $this->leerColeccion($this->getColCA()). "\nUltimo valor asignado a una cuenta: ". $this->getUltimoValorCuenta(). "\nClientes:". $this->leerColeccion($this->coleccionCliente);
+        return "Cuentas corrientes:". $this->leerArregloMulti($this->getColCC()). "\nCajas de ahorro:". $this->leerArregloMulti($this->getColCA()). "\nUltimo valor asignado a una cuenta: ". $this->getUltimoValorCuenta(). "\nClientes:". $this->leerArreglo($this->coleccionCliente);
     }
 
-    public function leerColeccion($coleccion){
+    public function leerArreglo($coleccion){
         $cadena="";
         foreach ($coleccion as $objeto) {
             $cadena=$cadena. "\n".$objeto;
+        }
+        return $cadena;
+    }
+
+    public function leerArregloMulti($coleccion){
+        $cadena="";
+        foreach ($coleccion as $asociativo) {
+            $cadena=$cadena. "\nCuenta N°: ".$asociativo["numeroCuenta"]. " - ". $asociativo["objCuenta"];
         }
         return $cadena;
     }
@@ -76,13 +84,12 @@ class Banco{
 
     public function incorporarCuentaCorriente($numeroCliente, $montoDescubierto){
         $coleccionCuentaCorriente=$this->getColCC();    //copia de la colección original para luego setearla con la nueva incorpración
-        $numCuentaNueva=$this->getUltimoValorCuenta()+1;    //defino el numero de cuenta que tendrá si la misma es creada. Quiero que sea igual al número de índice del arreglo al que corresponde.
+        $numCuentaNueva=$this->getUltimoValorCuenta()+1;    //defino el numero de cuenta que tendrá si la misma es creada.
 
         $elObjCliente=$this->encontrarCliente($numeroCliente);
         if (!is_null($elObjCliente)) {
             $nvoObjCuentaCorriente=new CuentaCorriente($elObjCliente, 0, $montoDescubierto);
-            $coleccionCuentaCorriente[$numCuentaNueva]=$nvoObjCuentaCorriente;  //el índice del arreglo es el numero de cuenta por lo que los números índice de los arreglos para CC y CA no son necesariamente consecutivos.
-            //array_push($coleccionCuentaCorriente, $nvoObjCuentaCorriente);
+            $coleccionCuentaCorriente[]=["numeroCuenta"=>$numCuentaNueva, "objCuenta"=>$nvoObjCuentaCorriente]; //la colección de cuentas es un arreglo multidimensional, un asociativo dentro de un indexado
             $this->setColCC($coleccionCuentaCorriente);
             $this->setUltimoValorCuenta($numCuentaNueva);
         }
@@ -91,45 +98,57 @@ class Banco{
 
     public function incorporarCajaAhorro($numeroCliente){
         $coleccionCajaAhorro=$this->getColCA();    //copia de la colección original para luego setearla con la nueva incorpración
-        $numCuentaNueva=$this->getUltimoValorCuenta()+1;    //defino el número de cuenta que tendrá si la misma es creada. Quiero que sea igual al número de índice del arreglo al que corresponde.
+        $numCuentaNueva=$this->getUltimoValorCuenta()+1;    //defino el número de cuenta que tendrá si la misma es creada.
 
         $elObjCliente=$this->encontrarCliente($numeroCliente);
         if (!is_null($elObjCliente)) {
             $nvoObjCajaAhorro=new CuentaAhorro($elObjCliente, 0);
-            $coleccionCajaAhorro[$numCuentaNueva]=$nvoObjCajaAhorro;    //el índice del arreglo es el numero de cuenta por lo que los números índice de los arreglos para CC y CA no son necesariamente consecutivos.
-            //array_push($colecccionCajaAhorro, $nvoObjCajaAhorro);
+            $coleccionCajaAhorro[]=["numeroCuenta"=>$numCuentaNueva, "objCuenta"=>$nvoObjCajaAhorro];   //la colección de cuentas es un arreglo multidimensional, un asociativo dentro de un indexado
             $this->setColCA($coleccionCajaAhorro);
             $this->setUltimoValorCuenta($numCuentaNueva);
         }
         return $elObjCliente;
     }
 
-    public function realizarDeposito($numCuenta, $monto){
-        $cuentaEncontrada=null;
+    public function buscarCuenta($numCuenta){
         $colCCCopia=$this->getColCC();
         $colCACopia=$this->getColCA();
-        $coleccionCuentas=array_merge($colCCCopia, $colCACopia);
-        
-        print_r($coleccionCuentas);
+        $coleccionCuentas=array_merge($colCCCopia, $colCACopia);    //sumo los arreglos asociativos en un solo arreglo cuentas general
+        $cuentaEncontrada=false;    //Bandera
+        $posicionCuenta=0;          //Contador
+        $objCuentaEncontrada=null;  //Variable contenedora del objeto si es encontrado, caso contrario me ayudara a responder al usuario que la cuenta no existe
 
-        $cuentaEncontrada=$coleccionCuentas[$numCuenta];
-        if (!is_null($cuentaEncontrada)) {
-            $cuentaEncontrada->realizarDeposito($monto);
+        //Busqueda de la cuenta dentro del arreglo de cuentas
+        while (!$cuentaEncontrada && $posicionCuenta<count($coleccionCuentas)) {
+            if ($coleccionCuentas[$posicionCuenta]["numeroCuenta"]==$numCuenta) {
+                $cuentaEncontrada=true;
+                $objCuentaEncontrada=$coleccionCuentas[$posicionCuenta]["objCuenta"];
+            }
+            $posicionCuenta++;
         }
-        return $cuentaEncontrada;
+        return $objCuentaEncontrada;
+    }
+
+    public function realizarDeposito($numCuenta, $monto){
+        //Busqueda externa de la cuenta
+        $elObjCuenta=$this->buscarCuenta($numCuenta);
+
+        //Si se encontró la cuenta buscada se realiza la operacion de deposito
+        if (!is_null($elObjCuenta)) {
+            $elObjCuenta->realizarDeposito($monto);
+        }
+        return $elObjCuenta;
     }
 
     public function realizarRetiro($numCuenta, $monto){
-        $cuentaEncontrada=null;
-        $colCCCopia=$this->getColCC();
-        $colCACopia=$this->getColCA();
-        $coleccionCuentas=array_merge($colCCCopia, $colCACopia);
+        //Busqueda externa de la cuenta
+        $elObjCuenta=$this->buscarCuenta($numCuenta);
 
-        $cuentaEncontrada=$coleccionCuentas[$numCuenta];
-        if (!is_null($cuentaEncontrada)) {
-            $cuentaEncontrada->realizarRetiro($monto);
+        //Si se encontró la cuenta buscada se realiza la operacion de deposito
+        if (!is_null($elObjCuenta)) {
+            $elObjCuenta->realizarRetiro($monto);
         }
-        return $cuentaEncontrada;
+        return $elObjCuenta;
     }
 }
 ?>
