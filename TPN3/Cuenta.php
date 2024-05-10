@@ -38,8 +38,8 @@ class Cuenta{
     }
 
     public function realizarRetiro($monto){
-            $nvoSaldo=$this->getSaldo() - $monto;
-            $this->setSaldo($nvoSaldo);
+        $nvoSaldo=$this->getSaldo() - $monto;
+        $this->setSaldo($nvoSaldo);
     }
 
 }

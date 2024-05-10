@@ -58,10 +58,9 @@ class Banco{
         $this->setColCliente($colClienteCopia);
     }
 
-    public function incorporarCuentaCorriente($numeroCliente, $montoDescubierto){
+    public function encontrarCliente($numeroCliente){
         $objClienteEncontrado=null;
         $coleccionCliente=$this->getColCliente();
-        $coleccionCuentaCorriente=$this->getColCC();
         $clienteEncontrado=false;
         $posicionCliente=0;
         
@@ -72,18 +71,65 @@ class Banco{
             } //Hace falta un else por si no encuentro el cliente con ese numero?
             $posicionCliente++;
         }
+        return $objClienteEncontrado;
+    }
 
-        if ($clienteEncontrado) {
-            $nvoObjCuentaCorriente=new CuentaCorriente($objClienteEncontrado, 0, $montoDescubierto);
-            array_push($coleccionCuentaCorriente, $nvoObjCuentaCorriente);
+    public function incorporarCuentaCorriente($numeroCliente, $montoDescubierto){
+        $coleccionCuentaCorriente=$this->getColCC();    //copia de la colección original para luego setearla con la nueva incorpración
+        $numCuentaNueva=$this->getUltimoValorCuenta()+1;    //defino el numero de cuenta que tendrá si la misma es creada. Quiero que sea igual al número de índice del arreglo al que corresponde.
+
+        $elObjCliente=$this->encontrarCliente($numeroCliente);
+        if (!is_null($elObjCliente)) {
+            $nvoObjCuentaCorriente=new CuentaCorriente($elObjCliente, 0, $montoDescubierto);
+            $coleccionCuentaCorriente[$numCuentaNueva]=$nvoObjCuentaCorriente;  //el índice del arreglo es el numero de cuenta por lo que los números índice de los arreglos para CC y CA no son necesariamente consecutivos.
+            //array_push($coleccionCuentaCorriente, $nvoObjCuentaCorriente);
             $this->setColCC($coleccionCuentaCorriente);
+            $this->setUltimoValorCuenta($numCuentaNueva);
         }
-        
-        return $clienteEncontrado;
+        return $elObjCliente;
     }
 
     public function incorporarCajaAhorro($numeroCliente){
+        $coleccionCajaAhorro=$this->getColCA();    //copia de la colección original para luego setearla con la nueva incorpración
+        $numCuentaNueva=$this->getUltimoValorCuenta()+1;    //defino el número de cuenta que tendrá si la misma es creada. Quiero que sea igual al número de índice del arreglo al que corresponde.
 
+        $elObjCliente=$this->encontrarCliente($numeroCliente);
+        if (!is_null($elObjCliente)) {
+            $nvoObjCajaAhorro=new CuentaAhorro($elObjCliente, 0);
+            $coleccionCajaAhorro[$numCuentaNueva]=$nvoObjCajaAhorro;    //el índice del arreglo es el numero de cuenta por lo que los números índice de los arreglos para CC y CA no son necesariamente consecutivos.
+            //array_push($colecccionCajaAhorro, $nvoObjCajaAhorro);
+            $this->setColCA($coleccionCajaAhorro);
+            $this->setUltimoValorCuenta($numCuentaNueva);
+        }
+        return $elObjCliente;
+    }
+
+    public function realizarDeposito($numCuenta, $monto){
+        $cuentaEncontrada=null;
+        $colCCCopia=$this->getColCC();
+        $colCACopia=$this->getColCA();
+        $coleccionCuentas=array_merge($colCCCopia, $colCACopia);
+        
+        print_r($coleccionCuentas);
+
+        $cuentaEncontrada=$coleccionCuentas[$numCuenta];
+        if (!is_null($cuentaEncontrada)) {
+            $cuentaEncontrada->realizarDeposito($monto);
+        }
+        return $cuentaEncontrada;
+    }
+
+    public function realizarRetiro($numCuenta, $monto){
+        $cuentaEncontrada=null;
+        $colCCCopia=$this->getColCC();
+        $colCACopia=$this->getColCA();
+        $coleccionCuentas=array_merge($colCCCopia, $colCACopia);
+
+        $cuentaEncontrada=$coleccionCuentas[$numCuenta];
+        if (!is_null($cuentaEncontrada)) {
+            $cuentaEncontrada->realizarRetiro($monto);
+        }
+        return $cuentaEncontrada;
     }
 }
 ?>
