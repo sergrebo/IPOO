@@ -52,5 +52,13 @@ class Venta{
         }
         return $cadena;
     }
+
+    public function darImporteVenta(){}
+
+    public function incorporarProductoTienda(){}
+
+    public function retornarImporteProducto($codProducto){}
+
+    public function retornarCostoProductoTienda(){}
 }
 ?>
