@@ -2,6 +2,11 @@
 class Local{
     //Atributos
     private $coleccionProductos;
+    /**
+     * private $coleccionProductosRegionales;
+     * private $coleccionProductosImportados;
+     */
+    private $coleccionVentasRealizadas;
 
     //Método Constructor
     public function __construct($coleccionProductos){
@@ -11,7 +16,7 @@ class Local{
     ///Métodos de acceso
     //Getters
     public function getColeccionProductos(){
-        return $this->getColeccionProductos();
+        return $this->coleccionProductos;
     }
 
     //Setters
@@ -79,6 +84,24 @@ class Local{
     }
 
     
+    /** Incorpora el producto que ingresa como parametro al arreglo coleccionProductos que almacena todos los productos de la venta 
+     * 
+    */
+    public function incorporarProductoTienda($objProducto){
+        $colProdCopia=$this->getColeccionProductos();
+        array_push($colProdCopia, $objProducto);            //¿No deberia ser un arreglo multidimensional? Asociativo (["objProd"]["cantProd"]) dentro de indexado
+        $this->setColeccionProductos($colProdCopia);
+    }
+
+    public function retornarCostoProductoTienda(){}
+
+    public function productoMasEconomico($rubro){}
+
+    public function informarProductosMasVendidos($anio, $n){}
+
+    public function promedioVentasImportados(){}
+
+    public function informarConsumoCliente($tipoDoc, $numDoc){}
 
     //sS
 }

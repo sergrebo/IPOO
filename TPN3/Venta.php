@@ -40,9 +40,12 @@ class Venta{
         return "Fecha: ". $this->getFecha(). " | Producto/s: ". $this->descifrarProductos(). " | Cliente: ". $this->getObjCliente();
     }
 
+    /** Si la venta consta de un arreglo de objetos, lo recorre y da cada uno de ellos. Caso contrario, da el unico objeto de la venta.
+     * 
+     */
     public function descifrarProductos(){
-        $cadena="";                                         //Inicialización de la variable que contendra el arreglo en forma de cadena de caracteres, si lo es, o simplemente el objeto producto
-        $productos=$this->getColeccionProductos();          //Copia del atributo
+        $cadena="";                                         //Inicialización de la variable a retornar
+        $productos=$this->getColeccionProductos();
         if (is_array($productos)) {
             foreach ($productos as $objProducto) {
                 $cadena.=$objProducto;
@@ -53,12 +56,20 @@ class Venta{
         return $cadena;
     }
 
-    public function darImporteVenta(){}
-
-    public function incorporarProductoTienda(){}
-
-    public function retornarImporteProducto($codProducto){}
-
-    public function retornarCostoProductoTienda(){}
+    /** Retorna el valor que debe ser abonado por el cliente
+     * 
+    */
+    public function darImporteVenta(){
+        $importeVenta=-1;
+        $colProdCopia=$this->getColeccionProductos();
+        foreach ($colProdCopia as $arregloProductoCantidad) {
+            foreach ($arregloProductoCantidad as $itemVenta) {
+                $objProducto=$itemVenta["objProd"];
+                $cantProducto=$itemVenta["cantProd"];
+                $importeVenta+=$cantProducto * $objProducto->darPrecioVenta();
+            }
+        }
+        return $importeVenta;
+    }
 }
 ?>
