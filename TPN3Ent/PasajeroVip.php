@@ -29,5 +29,14 @@ class PasajeroVip extends Pasajero{
         $cadena.=" - Viajero frecuente N°: ". $this->getNroViajeroFrecuente(). " - Cantidad de millas acumuladas: ". $this->getCantMillas();
         return $cadena;
     }
+
+    public function darPorcentajeIncremento(){
+        if ($this->cantMillas<=300) {
+            $incremento=35;
+        } elseif ($this->cantMillas>300) {
+            $incremento=30;
+        }
+        return $incremento;
+    }
 }
 ?>

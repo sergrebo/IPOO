@@ -56,7 +56,12 @@ class Pasajero{
     }
 
     public function __toString(){
-        return $this->getNombre(). " ". $this->getApellido(). " - DNI: ". $this->getNroDni(). " - Telefono: ". $this->getNroTelefono(). " - Asiento N°". $this->getNroAsiento(). " - Ticket N°: ". $this->getNroTicket(). "\n";
+        return $this->getNombre(). " ". $this->getApellido(). " - DNI: ". $this->getNroDni(). " - Telefono: ". $this->getNroTelefono(). "\nAsiento N°". $this->getNroAsiento(). " - Ticket N°: ". $this->getNroTicket(). "\n";
+    }
+
+    public function darPorcentajeIncremento(){
+        $incrementoEstandar=10;
+        return $incrementoEstandar;
     }
 }
 ?>
