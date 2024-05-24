@@ -47,7 +47,15 @@ class Empresa{
     }
 
     public function __toString(){
-        return "Empresa: ". $this->getDenominacion(). " - ". $this->getDireccion();
+        return "Empresa: ". $this->getDenominacion(). " - ". $this->getDireccion(). "\nClientes: \n". $this->encadenarArreglo($this->getColClientes()). "Motos: \n". $this->encadenarArreglo($this->getColMotos()). "Ventas: \n". $this->encadenarArreglo($this->getColVentas());
+    }
+
+    public function encadenarArreglo($arreglo){
+        $cadena="";
+        foreach ($arreglo as $objeto) {
+            $cadena.=$objeto."\n";
+        }
+        return $cadena;
     }
 
     public function retornarMoto($codigoMoto){
@@ -67,7 +75,8 @@ class Empresa{
 
     public function registrarVenta($colCodigosMoto, $objCliente){
         $precioFinal=-1;
-        if (!$objCliente->getEstadoBaja()) {
+        $objVenta=null;
+        if (!$objCliente->getDadoDeBaja()) {
             $objVenta=new Venta((count($this->getColVentas())+1), date("d/m/Y"), $objCliente, [], 0);
             for ($i=0; $i<count($colCodigosMoto) ; $i++) {
                 $objMoto=$this->retornarMoto($colCodigosMoto[$i]);
@@ -83,8 +92,32 @@ class Empresa{
         return $precioFinal;
     }
 
+    /** El método recorre la colección de ventas realizadas por la empresa y retorna el importe total de ventas Nacionales realizadas por la empresa
+     * 
+     */
     public function informarSumaVentasNacionales(){
-        
+        $sumaVentasNacionales=0;
+        $colVentasCopia=$this->getColVentas();
+        foreach ($colVentasCopia as $objVenta) {
+            $sumaVentasNacionales+=$objVenta->retornarTotalVentaNacional();
+        }
+        return $sumaVentasNacionales;
+    }
+
+    /** El método recorre la colección de ventas realizadas por la empresa y retorna una colección de ventas de motos importadas. Si en la venta al menos 
+     *  una de las motos es importada la venta debe ser informada
+     * 
+    */
+    public function informarVentasImportadas(){
+        $colVentasConMotosImportadas=[];
+        $colVentasCopia=$this->getColVentas();
+        foreach ($colVentasCopia as $objVenta) {
+            $colMotosImportadas=$objVenta->retornarMotosImportadas();
+            if (count($colMotosImportadas)>0) {
+                array_push($colVentasConMotosImportadas, $objVenta);
+            }
+        }
+        return $colVentasConMotosImportadas;
     }
 }
 ?>

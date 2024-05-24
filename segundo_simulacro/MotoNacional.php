@@ -21,6 +21,12 @@ class MotoNacional extends Moto{
         $this->porcentajeDescuentoIncentivo = $porcentajeDescuentoIncentivo;
     }
 
+    public function __toString(){
+        $cadena=parent::__toString();
+        $cadena.="\nDescuento incentivo nacional: ". $this->getPorcentajeDescuentoIncentivo(). "%\n";
+        return $cadena;
+    }
+
     public function darPrecioVenta(){
         $precioBase=parent::darPrecioVenta();
         $porcentajeDescuentoIncentivo=$this->getPorcentajeDescuentoIncentivo();

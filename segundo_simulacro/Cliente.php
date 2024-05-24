@@ -47,7 +47,7 @@ class Cliente {
     }
 
     public function __toString(){
-        return "Cliente: ". $this->getApellido(). ", ". $this->getNombre(). " ". $this->getTipoDoc(). " ". $this->getNumDoc(). " - ". $this->imprimirEstadoCuenta()."\n";
+        return $this->getApellido(). ", ". $this->getNombre(). " ". $this->getTipoDoc(). " ". $this->getNumDoc(). " - ". $this->imprimirEstadoCuenta();
     }
 
     public function imprimirEstadoCuenta(){
@@ -55,7 +55,7 @@ class Cliente {
         if ($this->getDadoDeBaja()) {
             $respuesta="Cuenta dada de baja";
         } else {
-            $respuesta="Cuenta dada de alta activa";
+            $respuesta="Cuenta dada de alta y activa";
         }
         return $respuesta;
     }

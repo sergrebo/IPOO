@@ -23,6 +23,12 @@ class MotoImportada extends Moto{
         $this->impuestosImportacion = $impuestosImportacion;
     }
 
+    public function __toString(){
+        $cadena=parent::__toString();
+        $cadena.="\nPaís de origen: ". $this->getPaisOrigen(). "\nImpuestos a la importación: $". $this->getImpuestosImportacion(). "\n";
+        return $cadena;
+    }
+
     public function darPrecioVenta(){
         $precioBase=parent::darPrecioVenta();
         $impuestosImportacion=$this->getImpuestosImportacion();

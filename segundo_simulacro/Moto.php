@@ -55,7 +55,7 @@ class Moto {
     }
 
     public function __toString(){
-        return "Motocicleta código: ". $this->getCodigo(). " - Costo: ". $this->getCosto(). " - Año: ". $this->getAnioFabricacion(). "\nDescripción:\n". $this->getDescripcion(). "\nPorcentaje de incremento anual: ". $this->getPocentajeIncrementoAnual(). "%\n". $this->imprimirActiva();
+        return "Moto código: ". $this->getCodigo(). " - Costo: ". $this->getCosto(). " - Año: ". $this->getAnioFabricacion(). "\nDescripción: ". $this->getDescripcion(). "\nPorcentaje de incremento anual: ". $this->getPocentajeIncrementoAnual(). "%\n". $this->imprimirActiva();
     }
 
     public function imprimirActiva(){
