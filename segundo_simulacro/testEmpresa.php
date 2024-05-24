@@ -17,5 +17,15 @@ $objMoto14=new MotoImportada(14, 12499900, 2020, "Pitbike Enduro Motocross Apoll
 $objEmpresa1=new Empresa("Alta Gama", "Av. Argentina 123", [$objCliente1, $objCliente2],[$objMoto11, $objMoto12, $objMoto13, $objMoto14], []);
 
 echo $objEmpresa1->registrarVenta([11, 12, 13, 14], $objCliente2);
+
+echo $objEmpresa1->registrarVenta([13, 14], $objCliente2);
+
+echo $objEmpresa1->registrarVenta([14, 2], $objCliente2);
+
+
+print_r($objEmpresa1->informarVentasImportadas());
+
+echo "suma de ventas nacionales: $".$objEmpresa1->informarSumaVentasNacionales()."\n";
+
 echo $objEmpresa1;
 ?>

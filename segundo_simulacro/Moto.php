@@ -55,7 +55,7 @@ class Moto {
     }
 
     public function __toString(){
-        return "Moto código: ". $this->getCodigo(). " - Costo: ". $this->getCosto(). " - Año: ". $this->getAnioFabricacion(). "\nDescripción: ". $this->getDescripcion(). "\nPorcentaje de incremento anual: ". $this->getPocentajeIncrementoAnual(). "%\n". $this->imprimirActiva();
+        return "Código: ". $this->getCodigo(). " - Costo: ". $this->getCosto(). " - Año: ". $this->getAnioFabricacion(). "\nDescripción: ". $this->getDescripcion(). "\nPorcentaje de incremento anual: ". $this->getPocentajeIncrementoAnual(). "%\n". $this->imprimirActiva();
     }
 
     public function imprimirActiva(){
@@ -73,10 +73,10 @@ class Moto {
         $disponible=$this->getActiva();
         $costo=$this->getCosto();
         $anioFabricacion=$this->getAnioFabricacion();
-        $porceentajeIncrementoAnual=$this->getPocentajeIncrementoAnual();
+        $porcentajeIncrementoAnual=$this->getPocentajeIncrementoAnual();
 
         if ($disponible) {
-            $_venta=$costo + $costo * ((date("Y") - $anioFabricacion) * $porceentajeIncrementoAnual)/100;
+            $_venta=$costo + $costo * ((date("Y") - $anioFabricacion) * $porcentajeIncrementoAnual)/100;
         }
         return $_venta;
     }

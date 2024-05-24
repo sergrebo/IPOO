@@ -47,7 +47,7 @@ class Venta{
     }
 
     public function __toString(){
-        return "Venta n°: ". $this->getNumero(). " - Fecha: ". $this->getFecha(). " - Cliente: ". $this->getObjCliente(). " - Moto/s: ". $this->encadenarMotos(). "Precio final: $ ". $this->getPrecioFinal();
+        return "Venta n°: ". $this->getNumero(). " - Fecha: ". $this->getFecha(). " - Cliente: ". $this->getObjCliente(). " - Moto/s: ". $this->encadenarMotos(). "Precio final: $ ". $this->getPrecioFinal(). "\n";
     }
 
     public function encadenarMotos(){
