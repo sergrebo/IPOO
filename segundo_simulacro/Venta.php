@@ -81,7 +81,7 @@ class Venta{
      * 
     */
     public function retornarTotalVentaNacional(){
-        $sumatoriaVentaNacional=-1;
+        $sumatoriaVentaNacional=0;
         $colMotosCopia=$this->getColMotos();
         foreach ($colMotosCopia as $objMoto) {
             if (is_a($objMoto, 'MotoNacional')){

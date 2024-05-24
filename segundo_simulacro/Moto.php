@@ -76,7 +76,7 @@ class Moto {
         $porcentajeIncrementoAnual=$this->getPocentajeIncrementoAnual();
 
         if ($disponible) {
-            $_venta=$costo + $costo * ((date("Y") - $anioFabricacion) * $porcentajeIncrementoAnual)/100;
+            $_venta=$costo + $costo * ((intval(date("Y")) - $anioFabricacion) * $porcentajeIncrementoAnual)/100;
         }
         return $_venta;
     }
